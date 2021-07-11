@@ -50,20 +50,25 @@ public class Enemy : MonoBehaviour
 
     void Hit()
     {
+        //cria as esferas de colisões no inimigo
         Collider2D hit = Physics2D.OverlapCircle(headPoint.position, headArea, playerLayer);
         Collider2D hitPlayer = Physics2D.OverlapCircle(collPoint.position, headArea, playerLayer);
 
         if (hit != null)
         {
-            health--;
-            anim.SetTrigger("hit");
-            hit.GetComponent<Rigidbody2D>().AddForce(Vector2.up * throwPlayerForce, ForceMode2D.Impulse);
+            if (hit.GetComponent<Player>().isVulnerable == false)
+            {
+                health--;
+                anim.SetTrigger("hit");
+                hit.GetComponent<Rigidbody2D>().AddForce(Vector2.up * throwPlayerForce, ForceMode2D.Impulse);
+            }
+            
         }
 
         //é chamado quando escosta no player de frente
         if (hitPlayer != null)
         {
-
+            hitPlayer.GetComponent<Player>().AddDamage();
         }
     }
 
@@ -80,7 +85,7 @@ public class Enemy : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         //checa se está colidindo com algum obstáculo
-        if (collision.gameObject.layer == 9)
+        if (collision.gameObject.layer == 7)
         {
             isRight = !isRight;
         }

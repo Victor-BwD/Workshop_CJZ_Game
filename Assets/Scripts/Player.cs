@@ -6,9 +6,12 @@ public class Player : MonoBehaviour
 {
     public Rigidbody2D rb;
     public Animator anim;
+    public SpriteRenderer spriteRenderer;
+    public int health;
     public float speed;
     public float jumpForce;
-    bool isJumping; 
+    bool isJumping;
+    public bool isVulnerable;
 
     // Start is called before the first frame update
     void Start()
@@ -57,6 +60,30 @@ public class Player : MonoBehaviour
             anim.SetInteger("transition", 2);
             isJumping = true;
         }
+    }
+
+    public void AddDamage()
+    {
+        if(isVulnerable == false)
+        {
+            health--;
+            isVulnerable = true;
+            StartCoroutine(Respawn());
+        }
+        
+    }
+
+    IEnumerator Respawn()
+    {
+        spriteRenderer.enabled = false;
+        yield return new WaitForSeconds(0.5f);
+        spriteRenderer.enabled = true;
+        yield return new WaitForSeconds(0.5f);
+        spriteRenderer.enabled = false;
+        yield return new WaitForSeconds(0.5f);
+        spriteRenderer.enabled = true;
+        yield return new WaitForSeconds(0.5f);
+        isVulnerable = false;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
