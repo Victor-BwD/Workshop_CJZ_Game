@@ -8,6 +8,8 @@ public class GameController : MonoBehaviour
     public int totalCoins;
     public Text coinText; //variavel de acesso ao texto
 
+    public Image healthbar;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -24,5 +26,10 @@ public class GameController : MonoBehaviour
     {
         totalCoins++;
         coinText.text = totalCoins.ToString();
+    }
+
+    public void LoseHp(float value)
+    {
+        healthbar.fillAmount = value / 10;
     }
 }

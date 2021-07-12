@@ -7,25 +7,27 @@ public class Player : MonoBehaviour
     public Rigidbody2D rb;
     public Animator anim;
     public SpriteRenderer spriteRenderer;
-    public int health;
+    public float health;
     public float speed;
     public float jumpForce;
     bool isJumping;
     public bool isVulnerable;
+    float direction;
+
+    private GameController gc;
 
     // Start is called before the first frame update
     void Start()
     {
-            
+        gc = FindObjectOfType<GameController>();
     }
 
     // Update is called once per frame
     void Update()
     {
         //retorna uma direção no eixo x com valor entre -1 (esquerda) e 1 (direita)
-        float direction = Input.GetAxis("Horizontal");
+        direction = Input.GetAxis("Horizontal");
 
-        rb.velocity = new Vector2(direction * speed, rb.velocity.y);
 
         if(direction > 0)
         {
@@ -52,6 +54,12 @@ public class Player : MonoBehaviour
         Jump();
     }
 
+    private void FixedUpdate()
+    {
+
+        rb.velocity = new Vector2(direction * speed, rb.velocity.y);
+    }
+
     void Jump()
     {
         if (Input.GetKeyDown(KeyCode.Space) && isJumping == false)
@@ -66,6 +74,7 @@ public class Player : MonoBehaviour
     {
         if(isVulnerable == false)
         {
+            gc.LoseHp(health);
             health--;
             isVulnerable = true;
             StartCoroutine(Respawn());
